@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin - workout details</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body class="text-white red-background">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" style="margin-left:10px;" href="/">GymDashboardApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+
+            <li class="nav-item" sec:authorize="isAnonymous()" >
+                <a class="nav-link text-warning" href="/login">Log in</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()" >
+                <a class="nav-link text-warning" href="/register">Register</a>
+            </li>
+
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link text-warning" href="/logout">Log out</a>
+            </li>
+
+            <li class="nav-item" sec:authorize='hasRole("ROLE_ADMIN")'>
+                <a class="nav-link text-danger" href="/admin/workout">Workouts</a>
+            </li>
+            <li class="nav-item" sec:authorize='hasRole("ROLE_ADMIN")'>
+                <a class="nav-link text-danger" href="/admin/exercise">Exercises</a>
+            </li>
+            <li class="nav-item" sec:authorize='hasRole("ROLE_ADMIN")'>
+                <a class="nav-link text-danger" href="/admin/guide">Guides</a>
+            </li>
+            <li class="nav-item" sec:authorize='hasRole("ROLE_ADMIN")'>
+                <a class="nav-link text-danger" href="/admin/muscle">Muscles</a>
+            </li>
+            <li class="nav-item" sec:authorize='hasRole("ROLE_ADMIN")'>
+                <a class="nav-link text-danger" href="/admin/user">Users</a>
+            </li>
+
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/web/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/web/guide">Guides</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/web/history">History</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/web/stats">Stats</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/web/dashboard">Dashboard</a>
+            </li>
+
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link text-warning" href="/web/workout/plan">Plan new</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+    <main>
+        <div class="container mt-5">
+            <div class="row mb-2 justify-content-center">
+                <div class="col-md-8 bg-dark" style="text-align:center;">
+                    <h2 class="mt-4 mb-4" >Id: <span th:text="${guide.id}"></span></h2>
+                    <h2 class="mt-4 mb-4 red-text" th:text="${guide.name}"></h2>
+
+                    <img th:src="@{/images/weight-lifting-up.png}" class="img-fluid" alt="Responsive image" style="max-width:200px;">
+
+                    <div th:each="line: ${guide.getSplitDescription}" class="mt-4">
+                        <p th:text="${line}"></p>
+                    </div>
+
+                    <div th:if="${guide.muscle}" class="mt-4">
+                        <h2>
+                            <a th:href="@{/admin/muscle/{id}(id=${guide.muscle.id})}" th:text="${guide.muscle.name}" class="text-decoration-none red-text-a"></a>
+                        </h2>
+                    </div>
+
+                    <div  class="row mb-5 mt-5 justify-content-center">
+                        <div class="col-md-4 bg-dark" style="text-align:center;">
+                            <button type="button" class="btn btn-danger white-border" style="float:left;">
+                                <a th:href="@{/admin/guide/delete/{id}(id=${guide.id})}" class="text-decoration-none text-white" style="font-size:25px;">Delete</a>
+                            </button>
+                        </div>
+                        <div class="col-md-4 bg-dark" style="text-align:center;">
+                            <button type="button" class="btn btn-danger white-border" style="float:right;">
+                                <a th:href="@{/admin/guide/edit/{id}(id=${guide.id})}" class="text-decoration-none text-white" style="font-size:25px;">Edit</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

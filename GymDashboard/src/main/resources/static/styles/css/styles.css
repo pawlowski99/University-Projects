@@ -1,0 +1,68 @@
+html, body{
+    height: 100%;
+}
+
+.orange-background{
+    background-color: #f7aa6e;
+}
+
+.orange-background2{
+    background-color: #ff8441;
+}
+
+
+
+.yellow-background{
+    background-color: #f1d06e;
+}
+
+.dark-background35{
+    background-color: #353535;
+}
+
+.dark-background45{
+    background-color: #454545;
+}
+
+.red-background{
+    background-color: #dd4f4f;
+}
+
+.orange-text{
+    color: #fc6603;
+}
+
+.red-text{
+    color: #dd4f4f;
+}
+
+
+.red-text-a{
+    color: #dd4f4f;
+}
+
+.white-border{
+    border: 1px solid white;
+}
+
+
+
+.red-text-a:hover{
+    color: #910202;
+}
+
+.error-form-padding{
+    margin-top:5px;
+    margin-bottom:5px;
+    padding:5px;
+}
+
+.mg-v-10{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.mg-v-30{
+    margin-top:30px;
+    margin-bottom:30px;
+}
