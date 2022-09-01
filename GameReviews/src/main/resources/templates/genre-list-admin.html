@@ -1,0 +1,61 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+	<link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+	<title>Genres - Admin</title>
+	<link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<div id="page-container">
+
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/games/new">New Releases</a></li>
+				<li><a href="/games">Games</a></li>
+				<li><a href="/genres">Genres</a></li>
+				<li><a href="/publishers">Publishers</a></li>
+				<li><a href="/games/sorted">Ranking</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+				<li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+				<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+				<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+				<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+			</ul>
+		</nav>
+
+		<div id="game-list-switch" >
+			<a href="/genres/">Switch to normal view</a>
+		</div>
+
+		<div id="game-list-admin">
+			<ul>
+				<li>
+					<span style="width:80px">ID</span>
+					<span style="width:800px">Name</span>
+					<span style="width:130px"><a href="/genre/save">Add a new genre</a></span>
+				</li>
+				<li th:each="genre: ${allGenres}">
+					<span style="width:80px" th:text="${genre.ID}"></span>
+					<span style="width:800px" th:text="${genre.name}"></span>
+
+					<span style="width:65px"><a th:href="@{/genre/edit/{id}(id=${genre.ID})}">Edit</a></span>
+					<span style="width:65px"><a th:if="${genre.canBeDeleted}" th:href="@{/genre/delete/{id}(id=${genre.ID})}">Delete</a></span>
+
+				</li>
+			</ul>
+		</div>
+
+		<footer>
+			<p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+		</footer>
+
+	</div>
+</body>
+
+</html>

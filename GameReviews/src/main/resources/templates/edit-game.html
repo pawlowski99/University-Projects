@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+    <link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+    <title>Edit Game</title>
+    <link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/games/new">New Releases</a></li>
+            <li><a href="/games">Games</a></li>
+            <li><a href="/genres">Genres</a></li>
+            <li><a href="/publishers">Publishers</a></li>
+            <li><a href="/games/sorted">Ranking</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+            <li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+        </ul>
+    </nav>
+
+    <div id="save_page">
+        <h2>Edit game</h2>
+
+        <form method="post" th:action="@{/game/edit}" th:object="${editedGame}">
+
+            <input type="hidden" th:field="*{id}"/><br>
+
+            <div class="save_page_row">
+                <label for="name">Game name: </label>
+                <input id="name" placeholder="Enter name" required type="text" th:field="*{nameGame}"/><br>
+            </div>
+
+            <div class="save_page_row">
+                <label for="date">Release date: </label>
+                <input id="date" placeholder="Enter date" required type="date" th:field="*{dateRelease}"/><br>
+            </div>
+
+            <div class="save_page_row">
+                <label for="pathCover">Path to cover: </label>
+                <input id="pathCover" placeholder="Enter path to cover" required type="text" th:field="*{pathCover}"/><br>
+            </div>
+
+            <div id="save_page_row_desc">
+                <label for="description">Description: </label>
+                <textarea id="description" placeholder="Enter description" cols="40" rows="10" required type="text" th:field="*{description}"/></textarea><br>
+            </div>
+
+            <div class="save_page_row">
+                <label>Genre: </label>
+                <select th:field="*{Genre}" class="form-control">
+                    <option th:each="genre: ${genres}" th:value="${genre.ID}" th:text="${genre.name}"></option>
+                </select><br>
+            </div>
+
+            <div class="save_page_row">
+                <label>Publisher: </label>
+                <select th:field="*{Publisher}" class="form-control">
+                    <option th:each="publisher: ${publishers}" th:value="${publisher.ID}" th:text="${publisher.name}"></option>
+                </select><br>
+            </div>
+
+            <input id="save_page_submit" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <footer>
+        <p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+    </footer>
+</body>
+
+</html>

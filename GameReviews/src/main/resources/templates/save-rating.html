@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+    <link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+    <title>Add Rating</title>
+    <link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/games/new">New Releases</a></li>
+            <li><a href="/games">Games</a></li>
+            <li><a href="/genres">Genres</a></li>
+            <li><a href="/publishers">Publishers</a></li>
+            <li><a href="/games/sorted">Ranking</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+            <li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+        </ul>
+    </nav>
+
+    <div id="save_page">
+
+        <h1 style="color:white; text-align:center" th:text="${game.nameGame}"></h1>
+        <h2 style="color:white; text-align:center" th:text="${game.publisher.name}"></h2>
+        <h3 style="color:white; text-align:center" th:text="${game.dateRelease}"></h3>
+
+        <form id="review_form" enctype="multipart/form-data" method="post" th:action="@{/rating/{id}(id=${game.id})}" th:object="${rating}">
+
+            <div class="rate">
+                <input type="radio" id="star10" name="rate" value="10" th:field="*{value}"/>
+                <label for="star10" title="text">10 stars</label>
+                <input type="radio" id="star9" name="rate" value="9" th:field="*{value}"/>
+                <label for="star9" title="text">9 stars</label>
+                <input type="radio" id="star8" name="rate" value="8" th:field="*{value}"/>
+                <label for="star8" title="text">8 stars</label>
+                <input type="radio" id="star7" name="rate" value="7" th:field="*{value}"/>
+                <label for="star7" title="text">7 stars</label>
+                <input type="radio" id="star6" name="rate" value="6" th:field="*{value}"/>
+                <label for="star6" title="text">6 star</label>
+                <input type="radio" id="star5" name="rate" value="5" th:field="*{value}"/>
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rate" value="4" th:field="*{value}"/>
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rate" value="3" th:field="*{value}"/>
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rate" value="2" th:field="*{value}"/>
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rate" value="1" th:field="*{value}"/>
+                <label for="star1" title="text">1 star</label>
+            </div>
+
+            <div id="add_review_desc">
+                <textarea  style="resize: none" id="name" placeholder="Enter description" cols="40" rows="10" required type="text" th:field="*{comment}"/></textarea>
+            </div>
+
+
+            <input id="save_page_submit" style="margin-bottom:100px" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <footer>
+        <p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+    </footer>
+</body>
+
+</html>

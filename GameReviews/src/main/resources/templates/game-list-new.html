@@ -1,0 +1,85 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+	<link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+	<title>Games</title>
+	<link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<div id="page-container">
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/games/new">New Releases</a></li>
+				<li><a href="/games">Games</a></li>
+				<li><a href="/genres">Genres</a></li>
+				<li><a href="/publishers">Publishers</a></li>
+				<li><a href="/games/sorted">Ranking</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+				<li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+				<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+				<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+				<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+			</ul>
+		</nav>
+
+		<div th:if="${allGames.isEmpty()}" id="no_recent_releases">
+			<h1>No recent releases.</h1>
+		</div>
+
+		<div th:if="${!allGames.isEmpty()}" id="game-list">
+			<element th:each="game: ${allGames}">
+
+
+
+				<div style="float:left">
+					<div class="element_img">
+						<img th:src="${game.pathCover}" alt="Game Cover" >
+					</div>
+
+					<div class="element_desc">
+						<h3 th:text="${game.nameGame}"></h3>
+						<h3 th:text="${game.genre.name}"></h3>
+						<h4 th:text="${game.dateRelease}"></h4>
+						<h4 th:text="${game.publisher.name}"></h4>
+					</div>
+
+					<a class="game_list_more_button" th:href="@{/game/{id}(id=${game.id})}">More ...</a>
+
+				</div>
+				<div class="game_list_rating">
+					<div class="game_list_stars">
+						<span th:if="${game.averageValue == 0}">★★★★★★★★★★</span>
+						<span th:if="${game.averageValue == 10}" style="color:#d4af37">★★★★★★★★★★</span>
+
+						<span th:if="${game.starRating < 10 && game.averageValue >= 1}">
+										<span th:each="i : ${#numbers.sequence(1, game.averageValue)}" style="color:#d4af37" th:text="'★'">
+										</span><span th:each="i : ${#numbers.sequence(1, 10-game.averageValue)}" th:text="'★'"></span>
+						</span>
+
+					</div>
+					<span style="color:#d4af37" th:text="${game.averageValue}"></span><br><br>
+					<span style="color:white; margin-bottom:116px; display:block;"><span style="color:#d4af37" th:text="${game.votes}"></span> Votes</span>
+
+					<a class="game_list_more_button" th:if="${!game.isRated}" style="left: 650px;"
+					   th:href="@{/rating/save/{id}(id=${game.id})}">Add Review</a>
+					<a class="game_list_more_button" th:if="${game.isRated}" style="left: 650px;"
+					   th:href="@{/rating/edit/{id}(id=${game.id})}">Edit Review</a>
+				</div>
+
+
+			</element>
+		</div>
+
+		<footer>
+			<p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+		</footer>
+	</div>
+</body>
+
+</html>

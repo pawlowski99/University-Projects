@@ -1,0 +1,54 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+	<link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+	<title>Publishers</title>
+	<link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/games/new">New Releases</a></li>
+			<li><a href="/games">Games</a></li>
+			<li><a href="/genres">Genres</a></li>
+			<li><a href="/publishers">Publishers</a></li>
+			<li><a href="/games/sorted">Ranking</a></li>
+			<li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+			<li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+			<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+			<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+			<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+		</ul>
+	</nav>
+
+	<div id="game-list-switch" sec:authorize="hasRole('ROLE_ADMIN')" >
+		<a href="/publishers/admin">Switch to admin view</a>
+	</div>
+
+
+	<div id="publisher_list">
+		<element th:each="publisher: ${allPublishers}">
+			<div class="publisher_logo">
+				<img th:src="${publisher.pathCover}" alt="Publisher Cover">
+			</div>
+			<div class="publisher_name">
+				<span th:text="${publisher.name}"></span>
+			</div>
+			<div class="publisher_games_button_block">
+				<a th:href="@{/publisher/{id}(id=${publisher.ID})}">Search for games</a>
+			</div>
+		</element>
+	</div>
+
+	<footer>
+		<p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+	</footer>
+</body>
+
+</html>

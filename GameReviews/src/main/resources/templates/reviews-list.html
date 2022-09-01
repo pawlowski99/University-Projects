@@ -1,0 +1,96 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+    <link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+    <title>Reviews</title>
+    <link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/games/new">New Releases</a></li>
+            <li><a href="/games">Games</a></li>
+            <li><a href="/genres">Genres</a></li>
+            <li><a href="/publishers">Publishers</a></li>
+            <li><a href="/games/sorted">Ranking</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+            <li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+        </ul>
+    </nav>
+
+    <div th:if="${allRatings.isEmpty()}" id="no_recent_releases">
+        <h1>You haven't rated anything yet.</h1>
+    </div>
+
+    <div th:if="${!allRatings.isEmpty()}" style="text-align:center;color:white;padding:10px 0px 20px 0px;">
+        <h1>My Reviews</h1>
+    </div>
+
+    <div th:if="${!allRatings.isEmpty()}" id="game_page_ratings">
+        <div th:each="rating: ${allRatings}">
+
+            <div class="reviewed_game">
+                <div style="border: 1px solid gray;">
+                    <img th:src="${rating.game.pathCover}" alt="Game Cover" width="100px" height="130px" >
+                </div>
+
+                <div style="width:650px;">
+                    <span class="reviewed_game_desc" th:text="${rating.game.nameGame}"></span>
+                    <span class="reviewed_game_desc" th:text="${rating.game.publisher.name}"></span>
+                </div>
+
+                <div style="width:150px">
+                    <a class="reviewed_game_button" style="margin-top:24px;" th:href="@{/game/{id}(id=${rating.game.id})}">More ...</a>
+                </div>
+
+
+            </div>
+
+            <div class="single_review">
+                <div>
+                    <!--========================= user avatar path here =========================-->
+                    <img class="game_page_user_pic" th:src="@{/images/gigachad2.jpg}" width="100px" alt="User Avatar">
+                </div>
+
+                <div class="single_review_left">
+                    <span th:text="${rating.user.username}"></span><br>
+                    <span style="font-size: 20px; color:gray" th:text="${rating.FormattedDateToString()}"></span>
+                </div>
+
+                <div class="single_review_right">
+                    <span th:if="${rating.value == 0}" style="margin-bottom:20px;">★★★★★★★★★★</span>
+                    <span th:if="${rating.value == 10}" style="color:#d4af37;margin-bottom:20px;">★★★★★★★★★★</span>
+
+                    <span th:if="${rating.value < 10 && rating.value > 0}">
+                        <span th:each="i : ${#numbers.sequence(1, rating.value)}" style="color:#d4af37" th:text="'★'">
+                        </span><span th:each="i : ${#numbers.sequence(1, 10-rating.value)}" th:text="'★'"></span>
+                    </span>
+
+                    <a class="reviewed_game_button" style="margin-top:-10px;" th:href="@{/rating/edit/{id}(id=${rating.game.id})}">Edit Review</a>
+                </div>
+
+
+                <div class="single_review_comment" th:text="${rating.comment}">
+                    Indeed exquisite
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <footer>
+        <p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+    </footer>
+</body>
+
+</html>

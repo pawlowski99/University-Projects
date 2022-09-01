@@ -1,0 +1,149 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+	<link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+	<title>Game</title>
+	<link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- nav bar -->
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/games/new">New Releases</a></li>
+			<li><a href="/games">Games</a></li>
+			<li><a href="/genres">Genres</a></li>
+			<li><a href="/publishers">Publishers</a></li>
+			<li><a href="/games/sorted">Ranking</a></li>
+			<li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+			<li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+			<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+			<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+			<li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+		</ul>
+	</nav>
+
+	<div id="game-list-switch" sec:authorize="hasRole('ROLE_ADMIN')" >
+		<a href="/games/admin">Switch to admin view</a>
+	</div>
+
+	<!-- game title -->
+	<h1 style="color:white; text-align:center" th:text="${game.nameGame}">The Witcher 3: Wild Hunt</h1>
+
+
+	<!-- game details -->
+	<div id="game_desc_page">
+
+		<!-- game cover -->
+		<div>
+			<img th:src="${game.pathCover}" alt="Game Cover" height="450px" width="300px">
+		</div>
+
+
+		<!-- info -->
+		<!-- rating -->
+		<div id="game_desc_left_side">
+			<span th:if="${game.starRating == 0}">★★★★★★★★★★</span>
+			<span th:if="${game.starRating == 10}" style="color:#d4af37">★★★★★★★★★★</span>
+
+			<span th:if="${game.starRating < 10 && game.starRating > 0}">
+						<span th:each="i : ${#numbers.sequence(1, game.starRating)}" style="color:#d4af37" th:text="'★'">
+						</span><span th:each="i : ${#numbers.sequence(1, 10-game.starRating)}" th:text="'★'"></span>
+			</span>
+			<br>
+			<element style="color:#d4af37" th:text="${game.averageValue}">10.0</element><br>
+			<element style="margin-bottom:50px">
+				<span style="color:#d4af37" th:text="${game.votes}">10</span>
+				<span> Votes</span>
+			</element><br>
+
+
+			<!-- genre -->
+			<div style="width:100%">
+				<!--========================= genre icon path here =========================-->
+				<img th:src="${game.genre.pathCover}" alt="Genre Icon" width="100px" style="opacity:0.5">
+			</div>
+			<element th:text="${game.genre.name}">RPG</element><br>
+
+
+			<!-- publisher -->
+			<div id="game_page_publisher" >
+				<span style="color:#999999">Released</span><br>
+				<span th:text="${game.dateRelease}">01.01.1999</span><br>
+				<span style="color:#999999">Published by</span><br>
+				<span th:text="${game.publisher.name}">CD Projekt</span>
+			</div>
+
+
+		</div>
+
+		<div id="game_desc_right_side">
+
+			<!-- rate button -->
+			<a class="game_desc_rate_button" th:if="${!game.isRated}" th:href="@{/rating/save/{id}(id=${game.id})}">Add Review</a>
+			<br th:if="${!game.isRated}">
+			<a class="game_desc_rate_button" th:if="${game.isRated}" th:href="@{/rating/edit/{id}(id=${game.id})}">Edit Review</a>
+			<br th:if="${game.isRated}">
+
+			<!-- publisher logo -->
+			<div id="game_desc_publisher_logo">
+				<!--========================= publisher logo path here =========================-->
+				<img th:src="${game.publisher.pathCover}" alt="Publisher Logo">
+			</div>
+		</div>
+
+		<!-- description -->
+		<div id="game_desc_description" th:text="${game.description}">
+
+		</div>
+
+
+	</div>
+
+	<!-- comments / ratings -->
+	<div id="game_page_ratings">
+		<div class="single_review" th:each="rating: ${ratings}">
+			<div >
+				<!--========================= user avatar path here =========================-->
+				<img class="game_page_user_pic" th:src="${rating.user.pathAvatar}" width="100px" alt="User Avatar">
+			</div>
+			<div class="single_review_left">
+				<span th:text="${rating.user.username}"></span><br>
+				<span style="font-size: 20px; color:gray" th:text="${rating.FormattedDateToString()}"></span>
+			</div>
+
+			<div class="single_review_right">
+				<span th:if="${rating.value == 0}" style="margin-bottom:20px;">★★★★★★★★★★</span>
+				<span th:if="${rating.value == 10}" style="color:#d4af37;margin-bottom:20px;">★★★★★★★★★★</span>
+
+				<span th:if="${rating.value < 10 && rating.value > 0}">
+					<span th:each="i : ${#numbers.sequence(1, rating.value)}" style="color:#d4af37" th:text="'★'">
+					</span><span th:each="i : ${#numbers.sequence(1, 10-rating.value)}" th:text="'★'"></span>
+				</span>
+
+
+				<a th:if="${rating.user.username == viewer}" class="reviewed_game_button" style="margin-top:-10px;"
+				   th:href="@{/rating/edit/{id}(id=${rating.game.id})}">Edit Review</a>
+
+
+			</div>
+
+
+			<div class="single_review_comment" th:text="${rating.comment}">
+				Indeed exquisite
+			</div>
+		</div>
+	</div>
+
+	<!-- footer -->
+	<footer>
+		<p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+	</footer>
+</body>
+
+</html>

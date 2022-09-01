@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Szymon Lichota, Szymon Porębski, Damian Pawłowski">
+    <link rel="icon" th:href="@{/icons/favicon.png}" type="image/png">
+    <title th:text="${viewedUser.username}">User</title>
+    <link th:href="@{/styles/css/styles.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/games/new">New Releases</a></li>
+            <li><a href="/games">Games</a></li>
+            <li><a href="/genres">Genres</a></li>
+            <li><a href="/publishers">Publishers</a></li>
+            <li><a href="/games/sorted">Ranking</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/web/users" class="admin_link">Users</a></li>
+            <li sec:authorize="isAnonymous()" style="float:right"><a class="active" href="/auth/login">Log in</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/auth/logout">Log out</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/web/user">Profile</a></li>
+            <li sec:authorize="isAuthenticated()" style="float:right"><a class="active" href="/rating/myreviews">My Reviews</a></li>
+        </ul>
+    </nav>
+
+    <div id="user_profile" th:object="${viewedUser}">
+
+        <div id="user_profile_pic">
+            <div id="user_banner"></div>
+            <img th:src="${viewedUser.pathAvatar != null ? viewedUser.pathAvatar :'/images/profilePic.png' }" alt="Profile Picture" width="100" height="100" style="border: 1px solid black;">
+            <element th:text="${viewedUser.username}"></element>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" th:action="@{/web/user/edit}" th:object="${viewedUser}">
+
+
+            <div class="save_page_row">
+                <h2>Edit your avatar</h2>
+                <input id="newAvatar" type="file" name="image" required accept="image/png, image/jpeg" /><br>
+            </div>
+
+            <input id="save_page_submit" type="submit" value="Submit">
+        </form>
+
+    </div>
+    <footer>
+        <p>Szymon Lichota, Szymon Porębski & Damian Pawłowski @2021</p>
+    </footer>
+</body>
+
+</html>
